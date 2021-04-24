@@ -1,0 +1,256 @@
+div.tabContainer {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.centered {
+	align-self: center;
+}
+
+.parent {
+	width: 100%;
+}
+
+.main > ul > li {
+	height: 20%;
+}
+
+.stripe {
+	display: flex;
+	width: 100%;
+
+	background-image: url("../assets/background_stripe.png");
+	background-attachment: fixed;
+	background-position-x: center;
+	background-repeat: no-repeat;
+}
+
+.stripe > div {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	padding-top: 10%;
+	padding-bottom: 10%;
+}
+
+.buttonPlay {
+	width: 480px;
+}
+.buttonVersion {
+	width: 130px;
+}
+
+.buttonPlay, .buttonVersion {
+	cursor: pointer;
+
+	top: 0;
+
+	margin: 2px;
+
+	height: 130px;
+
+	font-size: 50pt;
+	font-weight: 900;
+
+	border: none;
+	outline: none;
+	font-family: 'Zen Dots';
+	color: white;
+	background-color: #169843;
+}
+
+.buttonPlay:hover {
+	background-color: #1CBC51;
+}
+.buttonPlay:active {
+	background-color: #404040;
+}
+.buttonPlay:disabled {
+	background-color: #404040;
+	cursor: default;
+}
+.buttonVersion:hover {
+	background-color: #1CBC51;
+}
+.buttonVersion:active {
+	background-color: #404040;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+	padding: 0px;
+	margin: 0px;
+}
+
+div#tab_home_2 {
+	position: relative;
+	text-align: center;
+
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.changelogBackground {
+	width: 50%;
+	height: 50%;
+}
+
+.changeLogsHeading {
+	transform: translate(0%, -1250%);
+}
+
+.blur-on {
+	-webkit-filter: blur(5px);
+	-moz-filter: blur(5px);
+	-o-filter: blur(5px);
+	-ms-filter: blur(5px);
+	filter: blur(5px);
+}
+
+.versions {
+	display: flex;
+	width: 100%;
+	height: auto;
+}
+
+.versionsContainer {
+	display: flex;
+	width: 100%;
+	height: auto;
+	/*background-color: rgba(0, 0, 0, 0.5);*/
+
+	align-items: center;
+	justify-content: center;
+
+	position: absolute;
+	top: 0px;
+}
+.versionsContainer > div {
+	width: 25%;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+.versionsContainer > div > img {
+	width: 100%;
+}
+.versionsContainer > div > h1 {
+	position: relative;
+	margin-bottom: 1.5%;
+	left: 50%;
+}
+
+.versionsImage {
+	transition: all 300ms;
+	-webkit-transition: all 300ms;
+	-moz-transition: all 300ms;
+	-o-transition: 300ms;
+}
+
+.versionsImage:not(:hover) {
+	filter: grayscale(100%);
+}
+.versionsImage.colored {
+	filter: none;
+}
+
+.versionsImage:hover {
+	-ms-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
+
+	cursor: pointer;
+}
+
+.progress {
+	background-color: #181818;
+	border: 2px solid gray;
+	border-radius: 20px;
+
+	height: 40px;
+}
+.progress_done {
+	background: linear-gradient(to left, #7a049e, #3d0150);
+	border-radius: 20px;
+	height: 100%;
+}
+.progress_done > p {
+	width: 400px;
+	height: 20px;
+	margin-left: 15px;
+}
+
+/* CHANGELOGS */
+.changelogDiv {
+	background-image: url('../assets/versions/1.8.9.png');
+	background-position-x: center;
+	background-repeat: no-repeat;
+
+	width: 100%;
+
+	padding: 40px;
+	margin: 15px;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+
+	cursor: pointer;
+}
+
+.changelogsList {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	list-style: none;
+	justify-content: center;
+	width: 80%;
+	text-align: center;
+}
+
+.changelogsList > li > div {
+	display: flex;
+}
+
+.changelogsList > li > div:not(:hover) {
+	filter: grayscale(100%);
+	transition: all 300ms;
+	-webkit-transition: all 300ms;
+	-moz-transition: all 300ms;
+	-o-transition: 300ms;
+}
+
+.changelogsList > li > div:hover {
+	-ms-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
+
+	transition: all 300ms;
+	-webkit-transition: all 300ms;
+	-moz-transition: all 300ms;
+	-o-transition: 300ms;
+}
+
+.changeLogDiv:hover {
+	-ms-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    transform: scale(1.05);
+
+	cursor: pointer;
+}

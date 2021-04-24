@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+	<title>DragonClient Launcher</title>
+
+	<link rel="stylesheet" href="./styles/common.css">
+	<link rel="stylesheet" href="./styles/tabBar.css">
+	<link rel="stylesheet" href="./styles/home.css">
+	<link rel="stylesheet" href="./styles/settings.css">
+	<link rel="stylesheet" href="./styles/about.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600&display=swap" rel="stylesheet">
+
+	<header>
+		<div class="tabBar">
+			<div class="center">
+				<img src="assets/logo.png" alt="logo" class="logo">
+				<ul class="tabHolder">
+					<li class="tab">
+						<button id="btn_tab_home" onclick="onMenuButtonPress(0)" class="tabButton" style="background-color: #8C00FF;">Home</button>
+					</li>
+					<li class="tab">
+						<button id="btn_tab_settings" onclick="onMenuButtonPress(1)" class="tabButton">Settings</button>
+					</li>
+					<li class="tab">
+						<button id="btn_tab_about" onclick="onMenuButtonPress(2)" class="tabButton">About</button>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</header>
+
+	<body>
+		<!-- Tab Home -->
+		<div id="tab_home" class="tabContainer">
+			<div class="parent">
+				<div id="mainBlur" class="main">
+					<ul>
+						<li>
+							<div class="stripe">
+								<!-- <img src="../assets/background_stripe.png" alt="background"> -->
+								<div>
+									<button id="btn_play" onclick="onPlayButtonPress()" class="buttonPlay">Play 1.8.9</button>
+									<button id="btn_version" onclick="onVersionChangeButtonPress()" class="buttonVersion centered">...</button>
+								</div>
+							</div>
+							<div class="progress" id="progress_download" hidden="true">
+								<div class="progress_done" id="progress_start">
+									<p>
+										0%
+									</p>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div style="display: flex; justify-content: center; align-items: center;">
+								<ul class="changelogsList" id="changelogsMain" style="list-style: none;">
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div id="div_versionContainer" class="verisons" style="display: none;">
+					<div class="versionsContainer">
+						<div>
+							<h1>1.8.9</h1>
+							<img onclick="onButtonVersionPress('1.8.9', this)" src="assets/versions/1.8.9.png" alt="background" class="versionsImage" id="vImg_1.8.9">
+						</div>
+						<div>
+							<h1>1.16.5</h1>
+							<img onclick="onButtonVersionPress('1.16.5', this)" src="assets/versions/1.8.9.png" alt="background" class="versionsImage" id="vImg_1.16.5">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tab Settings -->
+		<div id="tab_settings" class="tabContainer" style="display: none;">
+			<ul>
+				<li>
+					<ul id="settingsListR1" class="settingsList">
+						<li>
+							<div class="settingsContainer" id="div_javaDir">
+								<h2>Java Dir:</h2>
+								<p>
+									Select your JRE dir
+								</p>
+								<div>
+									<label>
+										<input type="text" id="tbx_javaDir" onchange="onSettingChanged()">
+									</label>
+									<button id="browse_javaDir" class="browse" onclick="browse('java')">...</button>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="settingsContainer" id="div_minecraftDir">
+								<h2>Minecraft Dir:</h2>
+								<p>
+									Select your .minecraft dir
+								</p>
+								<div>
+									<label>
+										<input type="text" id="tbx_minecraftDir" onchange="onSettingChanged()">
+									</label>
+									<button id="browse_minecraftDir" class="browse" onclick="browse('mc')">...</button>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="settingsContainer" id="div_useOptifine">
+								<h2>Beta Branch</h2>
+								<p>
+									Enter a custom Beta Branch
+								</p>
+								<label>
+									<!--<input type="checkbox" id="cbx_optifine" onclick="onUseOptifinePress(this.checked)">
+									<span class="slider round"></span>-->
+									<input type="text" id="tbx_betaBranch">
+								</label>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<ul id="settingsListR2" class="settingsList">
+						<li>
+							<div class="settingsContainer" id="div_whenMcStarts">
+								<h2>When Minecraft starts</h2>
+								<p>
+									Select what happens when Minecraft starts <br><br><br>
+								</p>
+								<button class="comboButton">Keep Launcher Open</button>
+							</div>
+						</li>
+						<li>
+							<div class="settingsContainer" id="div_allocatedRAM">
+								<h2>Allocated RAM</h2>
+								<p>
+									Select how many RAM you want to allocate to minecraft RAM values between 1/4 and 1/2 of your available RAM is recommended.
+								</p>
+								<div>
+									<label>
+										<input onchange="allocatedRamSliderChanged(this.value, false)" oninput="allocatedRamSliderChanged(this.value, false)" type="range" id="rng_ram" min=512 max=1024 value="500">
+									</label>
+									<input type="number" id="num_allocatedRAM" onchange="allocatedRamSliderChanged(this.value, true)">
+									<label id="lbl_allocatedRAM">MiB</label>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="settingsContainer" id="div_resolution">
+								<h2>Resolution</h2>
+								<p>
+									Set your fullscreen resolution <br><br><br>
+								</p>
+								<div>
+									<input type="number" id="num_width" value=1220 onchange="onSettingChanged()">
+									<label>x</label>
+									<input type="number" id="num_height" value=720 onchange="onSettingChanged()">
+								</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Tab About -->
+		<div id="tab_about" class="tabContainer" style="display: none;">
+		</div>
+	</body>
+
+	<footer>
+	</footer>
+
+	<script src="./js/index.js"></script>
+	<script src="./js/settings.js"></script>
+	<script src="./js/directory.js"></script>
+	<script src="./js/auth.js"></script>
+	<script src="./js/api.js"></script>
+	<script src="./js/installer.js"></script>
+	<script src="./js/login/login.js"></script>
+</html>

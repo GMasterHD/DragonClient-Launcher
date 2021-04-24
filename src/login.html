@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<link rel="stylesheet" href="./styles/common.css">
+	<link rel="stylesheet" href="./styles/login/login.css">
+	<title>DragonClient Launcher - Log In</title>
+
+	<body>
+		<div class="loginDiv">
+			<h1>Login With your Mojang Account</h1>
+			<input type="text" name="" placeholder="E-Mail" id="tbx_email">
+			<input type="password" name="" placeholder="Password" id="tbx_password">
+			<div style="float: left;">
+				<label class="switch">
+					<input type="checkbox" id="saveData">
+					<span class="slider round"></span>
+				</label>
+				<label for="saveData">Save your account data</label>
+			</div>
+			<h2 id="status"></h2>
+			<button type="submit" id="btn_login" onclick="login()">Log In</button>
+		</div>
+	</body>
+
+	<script src="./js/login.js"></script>
+	<script src="./js/settings.js"></script>
+	<script src="./js/auth.js"></script>
+</html>

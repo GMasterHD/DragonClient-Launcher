@@ -1,0 +1,13 @@
+/cache
+/tmp
+/node_modules
+/logs
+/aufbau.txt
+/bspatch.exe
+/bzip2.dll
+/bzip2.exe
+/package-lock.json
+/package.json
+/profile.txt
+/request.http
+/settings.json

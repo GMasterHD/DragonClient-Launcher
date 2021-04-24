@@ -1,0 +1,17 @@
+html, header, body, footer {
+	padding: 0px;
+	margin: 0px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 18pt;
+
+	color: white;
+	background-color: #161616;
+
+	overflow-x: hidden;
+
+	cursor: default;
+}
+
+ul {
+	padding: 0px;
+}
