@@ -55,8 +55,8 @@ app.on('ready', () => {
 	});
 	ipcMain.on('openMainWindow', (event, args) => {
 		var mainWindow = new BrowserWindow({
-			minWidth: 1200,
-			minHeight: 700,
+			minWidth: 955,
+			minHeight: 600,
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
@@ -72,7 +72,7 @@ app.on('ready', () => {
 
 		setTimeout(() => {
 			mainWindow.webContents.send('accountData', {data: args});
-		}, 1000)
+		}, 1000);
 
 		loginWindow.close();
 		loginWindow.destroy();

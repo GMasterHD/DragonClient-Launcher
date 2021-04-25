@@ -6,10 +6,38 @@ const {ipcRenderer} = require('electron');
 
 const request = require('request');
 
-document.addEventListener('DOMContentLoaded', function() {
-	if(fs.existsSync('./profile.txt')) {
-		auth.loadAcData((data) => {
-			login(data.email, data.password);
+document.addEventListener('DOMContentLoaded', () => {
+	if(fs.existsSync('./profiles.json')) {
+		document.getElementById('btn_login').innerHTML = 'Logging in...';
+		document.getElementById('btn_login').disabled = true;
+		document.getElementById('tbx_email').disabled = true;
+		document.getElementById('tbx_password').disabled = true;
+		var validAcs = {
+			acs: [],
+			selected: 0
+		};
+		auth.loadAcData((accounts) => {
+			var itemsProcessed = 0;
+			accounts.acs.forEach(async (account, index, array) => {		
+				await new Promise((resolve) => {
+					setTimeout(resolve, 100);
+				});
+				validAcs.selected = accounts.selected;
+				await auth.authentificate(account.email, account.password, (result) => {
+					if(result.success) {					
+						validAcs.acs.push({
+							username: result.name,
+							email: account.email, 
+							password: account.password
+						});
+					}
+				});
+				++itemsProcessed;
+				if(itemsProcessed == array.length) {
+					auth.saveAcData(validAcs, validAcs.selected);
+					ipcRenderer.send('openMainWindow', validAcs);
+				}
+			});
 		});
 	}
 }, false);
@@ -24,14 +52,10 @@ function login(email, password) {
 	if(password) {
 		v_password = password;
 	}
-
-	console.log(`Logging in with ${v_email}:${v_password}`);
-
 	document.getElementById('btn_login').disabled = true;
 	document.getElementById('status').classList.remove('error');
 	document.getElementById('btn_login').innerHTML = 'Logging in...';
 	document.getElementById('status').innerHTML = 'Logging in...';
-
 	setTimeout(() => {
 		auth.authentificate(v_email, v_password, (result) => {
 			if(!result.success) {
@@ -41,6 +65,8 @@ function login(email, password) {
 				document.getElementById('btn_login').disabled = false;
 				document.getElementById('status').innerHTML = `${result.message}`;
 				document.getElementById('status').classList.add('error');
+				document.getElementById('tbx_email').disabled = false;
+				document.getElementById('tbx_password').disabled = false;
 			} else {
 				setTimeout(() => {
 					document.getElementById('status').innerHTML = 'Successfully logged in!';

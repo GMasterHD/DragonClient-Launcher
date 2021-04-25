@@ -12,7 +12,7 @@
 
 	<header>
 		<div class="tabBar">
-			<div class="center">
+			<div class="center" style="width: 100%;">
 				<img src="assets/logo.png" alt="logo" class="logo">
 				<ul class="tabHolder">
 					<li class="tab">
@@ -25,6 +25,9 @@
 						<button id="btn_tab_about" onclick="onMenuButtonPress(2)" class="tabButton">About</button>
 					</li>
 				</ul>
+				<div class="accountDiv align-rigth" id="btn_account_div" onclick="onAccountButtonPressed()">
+					Teyst
+				</div>
 			</div>
 		</div>
 	</header>
@@ -69,6 +72,10 @@
 							<h1>1.16.5</h1>
 							<img onclick="onButtonVersionPress('1.16.5', this)" src="assets/versions/1.8.9.png" alt="background" class="versionsImage" id="vImg_1.16.5">
 						</div>
+					</div>
+				</div>
+				<div class="popup" id="accountSelector" style="display: none;">
+					<div class="popupContainer" id="popup_versionSelector">
 					</div>
 				</div>
 			</div>
@@ -174,6 +181,7 @@
 	<footer>
 	</footer>
 
+	<script>window.$ = window.jQuery = require('jquery');</script>
 	<script src="./js/index.js"></script>
 	<script src="./js/settings.js"></script>
 	<script src="./js/directory.js"></script>

@@ -46,11 +46,7 @@ const tbx_javaDir = document.getElementById('tbx_javaDir');
 
 var installedRAM_mb;
 
-var accountData = {
-	username: undefined,
-	email: undefined,
-	password: undefined
-};
+var accountData = {acs: [], selected: 0};
 
 document.addEventListener('DOMContentLoaded', () => {
 	api.start(() => {
@@ -68,6 +64,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	ipcRenderer.on('accountData', (event, args) => {
 		this.accountData = args.data;
+
+		// Load acs into ac list
+		console.log('Loading account datas into list...');
+		var accountID = 0;
+		this.accountData.acs.forEach((account, index, array) => {
+			document.getElementById('popup_versionSelector').innerHTML += (`<div class="accountItem" id="account_${account.username.toLowerCase()}" onclick="onAccountSelectorPressed(${accountID})"><img src="https://mc-heads.net/avatar/${account.username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><h1 id="account_name_${account.username.toLowerCase()}">${account.username}</h1></div>`);
+			++accountID;
+		});
+
+		console.log(`Selected AC: ${accountData.acs[accountData.selected].username}`);
+		document.getElementById('btn_account_div').innerHTML = `<img src="https://mc-heads.net/avatar/${this.accountData.acs[this.accountData.selected].username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><div id="btn_account" class="accountButton">${this.accountData.acs[this.accountData.selected].username}</div>`;
 	});
 }, false);
 
@@ -122,7 +129,7 @@ function onPlayButtonPress() {
 	console.log('Minecraft Dir: ' + settings.getMinecraftDir());
 	document.getElementById("btn_play").disabled = true;
 
-	auth.authentificate(accountData.email, accountData.password, (body) => {
+	auth.authentificate(accountData.acs[accountData.selected].email, accountData.acs[accountData.selected].password, (body) => {
 		if(!body.success) {
 			console.error('Could authentificate user!');
 			console.error('Error: ' + body.message);
@@ -131,7 +138,6 @@ function onPlayButtonPress() {
 		}
 
 		installer.install(settings.getSelectedVersion(), () => {
-			console.log('Session: ' + JSON.stringify(body, 4, 4));
 			var startCode = api.getStartCode(settings.getSelectedVersion());
 			while(startCode.includes('${username}')) {
 				startCode = startCode.replace('${username}', body.name);
@@ -161,8 +167,6 @@ function onPlayButtonPress() {
 			while(startCode.includes('/')) {
 				startCode = startCode.replace('/', '\\');
 			}
-
-			console.log('StartCode: ' + startCode);
 			
 			const button = document.getElementById("btn_play");
 
@@ -285,4 +289,43 @@ function loadChangelogs() {
 
 		changelogsMain.innerHTML += `${changeLogHTML_pre}${changes}${changeLogHTML_post}`
 	});
+}
+
+function onAccountButtonPressed() {
+	const accountSelector = document.getElementById('accountSelector')
+	if(accountSelector.style.display == 'none') {
+		accountSelector.style.display = 'flex';
+	} else {
+		accountSelector.style.display = 'none';
+	}
+}
+
+var smallerThan1470 = false;
+$(window).resize(() => {
+	if ($(window).width() < 1470) {
+		if(!smallerThan1470) {
+			smallerThan1470 = true;
+
+			document.getElementById('btn_account').style.display = 'none';
+		}
+	} else {
+		if(smallerThan1470) {
+			smallerThan1470 = false;
+
+			document.getElementById('btn_account').style.display = 'flex';
+		}
+	}
+});
+
+function onAccountSelectorPressed(id) {
+	onAccountButtonPressed();
+	console.log(`Account of ${this.accountData.acs[id].username} has been pressed!`);
+	document.getElementById('btn_account_div').innerHTML = `<img src="https://mc-heads.net/avatar/${accountData.acs[id].username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><div id="btn_account" class="accountButton">${accountData.acs[id].username}</div>`;
+
+	accountData.selected = id;
+
+	// Update selected ac
+	const acData = JSON.parse(fs.readFileSync('./profiles.json'));
+	acData.selected = id;
+	fs.writeFileSync('./profiles.json', JSON.stringify(acData, 4, 4));
 }

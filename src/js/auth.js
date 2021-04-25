@@ -81,19 +81,58 @@ module.exports.authentificate = async (name, password, callback) => {
 	});
 };
 
-module.exports.saveAcData = (username, email, password) => {
-	const str = `${username}|${email}|${password}`;
-	const b64 = btoa(str);
-	fs.writeFileSync('./profile.txt', b64, {encoding: 'utf-8'});
+module.exports.saveAcData = (accounts, selected) => {
+	const b64Accounts = [];
+
+	accounts.acs.forEach((account) => {
+		const str = `${account.username}|${account.email}|${account.password}`;
+		const b64 = btoa(str);
+		b64Accounts.push(b64);
+	});
+	
+	var data = {};
+
+	if(selected) {
+		data = {
+			acs: b64Accounts,
+			selected: selected
+		};
+	} else {
+		data = {
+			acs: b64Accounts,
+			selected: 0
+		};
+	}
+
+	console.log(`Accounts: ${JSON.stringify(data, 4, 4)}`);
+	fs.writeFileSync('./profiles.json', JSON.stringify(data, 4, 4), {encoding: 'utf-8'});
 };
 module.exports.loadAcData = (callback) => {
-	const b64 = fs.readFileSync('./profile.txt', {encoding: 'utf-8'});
-	const str = atob(b64);
-	const split = str.split('|');
+	const json = JSON.parse(fs.readFileSync('./profiles.json', {encoding: 'utf-8'}));
 
-	callback({
-		username: split[0],
-		email: split[1],
-		password: split[2]
-	});
+	const result = {};
+	const acs = [];
+
+	for(var x = 0; x < json.acs.length; ++x) {
+		console.log(`String: ${json.acs[x]}`);
+		const b64 = json.acs[x];
+		const str = atob(b64);
+
+		console.log(`(Nb64): ${str}`);
+
+		const split = str.split('|');
+
+		acs.push({
+			username: split[0],
+			email: split[1],
+			password: split[2]
+		});
+	}
+
+	result.acs = acs;
+	result.selected = json.selected;
+
+	console.log(`Result: ${JSON.stringify(result, 4, 4)}`);
+
+	callback(result);
 };
