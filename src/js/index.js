@@ -295,8 +295,10 @@ function onAccountButtonPressed() {
 	const accountSelector = document.getElementById('accountSelector')
 	if(accountSelector.style.display == 'none') {
 		accountSelector.style.display = 'flex';
+		div_homeMain.classList.add('blur-on');
 	} else {
 		accountSelector.style.display = 'none';
+		div_homeMain.classList.remove('blur-on');
 	}
 }
 
@@ -305,13 +307,11 @@ $(window).resize(() => {
 	if ($(window).width() < 1470) {
 		if(!smallerThan1470) {
 			smallerThan1470 = true;
-
 			document.getElementById('btn_account').style.display = 'none';
 		}
 	} else {
 		if(smallerThan1470) {
 			smallerThan1470 = false;
-
 			document.getElementById('btn_account').style.display = 'flex';
 		}
 	}
