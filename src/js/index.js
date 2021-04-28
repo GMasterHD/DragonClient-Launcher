@@ -51,6 +51,7 @@ var accountData = {acs: [], selected: 0};
 document.addEventListener('DOMContentLoaded', () => {
 	api.start(() => {
 		loadChangelogs();
+		loadVersions();
 	});
 
 	installedRAM_mb = os.totalmem / 1024 / 1024;
@@ -65,11 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	ipcRenderer.on('accountData', (event, args) => {
 		this.accountData = args.data;
 
+		if(accountData.selected >= accountData.acs.length) accountData.selected = 0;
+
 		// Load acs into ac list
 		console.log('Loading account datas into list...');
 		var accountID = 0;
 		this.accountData.acs.forEach((account, index, array) => {
-			document.getElementById('popup_versionSelector').innerHTML += (`<div class="accountItem" id="account_${account.username.toLowerCase()}" onclick="onAccountSelectorPressed(${accountID})"><img src="https://mc-heads.net/avatar/${account.username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><h1 id="account_name_${account.username.toLowerCase()}">${account.username}</h1></div>`);
+			document.getElementById('popup_versionSelector').innerHTML = (`<div class="accountItem" id="account_${account.username.toLowerCase()}" onclick="onAccountSelectorPressed(${accountID})"><img src="https://mc-heads.net/avatar/${account.username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><h1 id="account_name_${account.username.toLowerCase()}">${account.username}</h1></div>`) + document.getElementById('popup_versionSelector').innerHTML;
 			++accountID;
 		});
 
@@ -328,4 +331,46 @@ function onAccountSelectorPressed(id) {
 	const acData = JSON.parse(fs.readFileSync('./profiles.json'));
 	acData.selected = id;
 	fs.writeFileSync('./profiles.json', JSON.stringify(acData, 4, 4));
+}
+
+function onAddAccountPressed() {
+	onAccountButtonPressed();
+	ipcRenderer.send('openAddAccountWindow');
+
+	ipcRenderer.on('addAccount', (event, args) => {
+		console.log(`Adding account: ${JSON.stringify(args, 4, 4)}`);
+		accountData.acs.push(args);
+		updateAccountSelector();
+	});
+}
+
+function updateAccountSelector() {
+	document.getElementById('popup_versionSelector').innerHTML = '<div class="accountItem" onclick="onAddAccountPressed()"><img src="./assets/plus.png" alt="Avatar" id="playerIcon" class="avatar"><h1>Add Account</h1></div>';
+
+	var newAccountData = {acs: [], selected: 0};
+
+	accountData.acs.forEach((account, index, array) => {
+		if(!newAccountData.acs.some(ac => ac.username === account.username)){
+			newAccountData.acs.push(account);
+		}
+	});
+
+	newAccountData.acs.forEach((account, index, array) => {
+		document.getElementById('popup_versionSelector').innerHTML = (`<div class="accountItem" id="account_${account.username.toLowerCase()}" onclick="onAccountSelectorPressed(${index})"><img src="https://mc-heads.net/avatar/${account.username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><h1 id="account_name_${account.username.toLowerCase()}">${account.username}<h1></div>`) + document.getElementById('popup_versionSelector').innerHTML;
+	});
+
+	newAccountData.selected = newAccountData.acs.length - 1;
+	accountData = newAccountData;
+
+	auth.saveAcData(newAccountData, accountData.selected);
+}
+
+function loadVersions() {
+	var versions = api.getVersions();
+	Object.keys(versions).forEach((key, index, array) => {
+		if(typeof versions[key] === 'object') {
+			console.log(`Key: ${key}`);
+			document.getElementById('div_versions').innerHTML += (`<div><h1>${key}</h1><img onclick="onButtonVersionPress('${key}', this)" src="assets/versions/${key}.png"alt="background" class="versionsImage" id="vImg_${key}"></div>`);
+		}
+	});
 }

@@ -9,6 +9,9 @@ const {app, BrowserWindow, Menu, ipcMain} = electron;
 const ipc = require('ipc');
 const { ipcRenderer } = require('electron/renderer');
 
+let addAccountWindow;
+let mainWindow;
+
 app.on('ready', () => {
 	var loginWindow = new BrowserWindow({
 		minWidth: 1200,
@@ -54,7 +57,7 @@ app.on('ready', () => {
 		}
 	});
 	ipcMain.on('openMainWindow', (event, args) => {
-		var mainWindow = new BrowserWindow({
+		mainWindow = new BrowserWindow({
 			minWidth: 955,
 			minHeight: 600,
 			webPreferences: {
@@ -70,17 +73,22 @@ app.on('ready', () => {
 			slashes: true
 		}));
 
+		mainWindow.on('close', () => {
+			app.quit();
+		})
+
 		setTimeout(() => {
 			mainWindow.webContents.send('accountData', {data: args});
 		}, 1000);
 
 		loginWindow.close();
-		loginWindow.destroy();
 	});
 	ipcMain.on('openLoginWindow', (event, args) => {
 		loginWindow = new BrowserWindow({
 			minWidth: 1200,
-			minHeight: 700,
+			minHeight: 600,
+			width: 1200,
+			height: 600,
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
@@ -92,6 +100,30 @@ app.on('ready', () => {
 			protocol: 'file:',
 			slashes: true
 		}));
+	});
+
+	ipcMain.on('openAddAccountWindow', (event, args) => {
+		addAccountWindow = new BrowserWindow({
+			minWidth: 900,
+			minHeight: 600,
+			width: 900,
+			height: 600,
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+				preload: path.join(__dirname, "preload.js")
+			}
+		});
+		addAccountWindow.loadURL(url.format({
+			pathname: path.join(__dirname, 'src/addAccount.html'),
+			protocol: 'file:',
+			slashes: true
+		}));
+
+		ipcMain.on('accountData_add', (event, args) => {
+			addAccountWindow.hide();
+			mainWindow.webContents.send('addAccount', args);
+		});
 	});
 });
 

@@ -57,7 +57,11 @@ module.exports.getStartCode = (version) => {
 };
 
 module.exports.getVersions = (version) => {
-	return JSON.parse(fs.readFileSync('./tmp/versions.json'))[version];
+	if(version) {
+		return JSON.parse(fs.readFileSync('./tmp/versions.json'))[version];
+	} else {
+		return JSON.parse(fs.readFileSync('./tmp/versions.json'));
+	}
 };
 
 module.exports.getChangelogs = () => {
