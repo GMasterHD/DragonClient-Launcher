@@ -49,6 +49,28 @@ var installedRAM_mb;
 var accountData = {acs: [], selected: 0};
 
 document.addEventListener('DOMContentLoaded', () => {
+	console.log('Loading account data...');
+	if(fs.existsSync('./profiles.json')) {
+		console.log('Found profiles.json!');
+		auth.loadAcData((result) => {
+			console.log(`Result: ${result}`)
+			this.accountData = result;
+
+			if(accountData.selected >= accountData.acs.length) accountData.selected = 0;
+
+			// Load acs into ac list
+			console.log('Loading account datas into list...');
+			var accountID = 0;
+			this.accountData.acs.forEach((account, index, array) => {
+				document.getElementById('popup_versionSelector').innerHTML = (`<div class="accountItem" id="account_${account.username.toLowerCase()}" onclick="onAccountSelectorPressed(${accountID})"><img src="https://mc-heads.net/avatar/${account.username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><h1 id="account_name_${account.username.toLowerCase()}">${account.username}</h1></div>`) + document.getElementById('popup_versionSelector').innerHTML;
+				++accountID;
+			});
+
+			console.log(`Selected AC: ${accountData.acs[accountData.selected].username}`);
+			document.getElementById('btn_account_div').innerHTML = `<img src="https://mc-heads.net/avatar/${this.accountData.acs[this.accountData.selected].username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><div id="btn_account" class="accountButton">${this.accountData.acs[this.accountData.selected].username}</div>`;
+		});
+	}
+
 	api.start(() => {
 		loadChangelogs();
 		loadVersions();
@@ -131,6 +153,8 @@ function onPlayButtonPress() {
 	console.log('JAR Dir: ' + settings.getJavaDir());
 	console.log('Minecraft Dir: ' + settings.getMinecraftDir());
 	document.getElementById("btn_play").disabled = true;
+
+	console.log(`Data: ${accountData}`);
 
 	auth.authentificate(accountData.acs[accountData.selected].email, accountData.acs[accountData.selected].password, (body) => {
 		if(!body.success) {

@@ -1,0 +1,17 @@
+directories:
+  output: build
+  buildResources: build
+appId: io.github.gmasterhd.dragonClientLauncher
+productName: Dragon Client Launcher
+target: NSIS
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  uninstallerIcon: build/installerIcon.ico
+  artifactName: Dragon_Client_${version}_Setup
+  createDesktopShortcut: false
+  createStartMenuShortcut: false
+  shortcutName: DragonClient Launcher
+files: []
+electronVersion: 12.0.4

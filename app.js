@@ -2,6 +2,7 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
+const auth = require('./src/js/auth.js');
 
 const settings = require('./src/js/settings.js')
 
@@ -13,7 +14,7 @@ let addAccountWindow;
 let mainWindow;
 
 app.on('ready', () => {
-	var loginWindow = new BrowserWindow({
+	/*var loginWindow = new BrowserWindow({
 		minWidth: 1200,
 		minHeight: 700,
 		webPreferences: {
@@ -27,7 +28,7 @@ app.on('ready', () => {
 		pathname: path.join(__dirname, 'src/login.html'),
 		protocol: 'file:',
 		slashes: true
-	}));
+	}));*/
 
 	ipcMain.on('openDirectory', (event, arg) => {
 		var options = {
@@ -56,7 +57,7 @@ app.on('ready', () => {
 			event.sender.send('directory', dir[0]);
 		}
 	});
-	ipcMain.on('openMainWindow', (event, args) => {
+	//ipcMain.on('openMainWindow', (event, args) => {
 		mainWindow = new BrowserWindow({
 			minWidth: 955,
 			minHeight: 600,
@@ -77,12 +78,12 @@ app.on('ready', () => {
 			app.quit();
 		})
 
-		setTimeout(() => {
+		/*setTimeout(() => {
 			mainWindow.webContents.send('accountData', {data: args});
-		}, 1000);
+		}, 1000);*/
 
-		loginWindow.close();
-	});
+		//loginWindow.close();
+	//});
 	ipcMain.on('openLoginWindow', (event, args) => {
 		loginWindow = new BrowserWindow({
 			minWidth: 1200,

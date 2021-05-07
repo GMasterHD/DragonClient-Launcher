@@ -70,15 +70,24 @@ function login(email, password) {
 			} else {
 				setTimeout(() => {
 					document.getElementById('status').innerHTML = 'Successfully logged in!';
-					if(document.getElementById('saveData').checked) {
-						auth.saveAcData(result.name, v_email, v_password);
+					const validAcs = {
+						acs: [
+							{
+								username: result.name,
+								email: v_email,
+								password: v_password
+							}
+						],
+						selected: result.name
 					}
-					const accountData = {
-						name: result.name,
+					/*if(document.getElementById('saveData').checked) {
+						auth.saveAcData(validAcs, validAcs.selected);
+					}*/
+					ipcRenderer.send('openMainWindow', {
+						username: result.name,
 						email: v_email,
 						password: v_password
-					};
-					ipcRenderer.send('openMainWindow', accountData);
+					});
 				}, 1000);
 			}
 		});
