@@ -28,10 +28,10 @@ function login() {
 			});
 		} else {
 			console.error('Could authentificate user!');
-			console.error('Error: ' + result.message);
+			console.error('Error: ' + data.message);
 			document.getElementById('btn_add').innerHTML = 'Add Account';
 			document.getElementById('btn_add').disabled = false;
-			document.getElementById('status').innerHTML = `${result.message}`;
+			document.getElementById('status').innerHTML = `${data.message}`;
 			document.getElementById('status').classList.add('error');
 			document.getElementById('tbx_email').disabled = false;
 			document.getElementById('tbx_password').disabled = false;

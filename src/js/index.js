@@ -156,6 +156,12 @@ function onPlayButtonPress() {
 
 	console.log(`Data: ${accountData}`);
 
+	if(accountData.acs[accountData.selected] == undefined) {
+		alert('You do not have any account Added! Press on accounts to add one!');
+		btn_play.disabled = false;
+		return;
+	}
+
 	auth.authentificate(accountData.acs[accountData.selected].email, accountData.acs[accountData.selected].password, (body) => {
 		if(!body.success) {
 			console.error('Could authentificate user!');
@@ -201,7 +207,7 @@ function onPlayButtonPress() {
 			button.innerHTML = "Starting...";
 			
 			setTimeout(() => {
-				var minecraft = exec(`java ${startCode}`, (error, stdout, stderr) => {
+				var minecraft = exec(`java -cp MCStart ${startCode}`, (error, stdout, stderr) => {
 					if(error) {
 						console.error(error);
 					}
@@ -369,7 +375,7 @@ function onAddAccountPressed() {
 }
 
 function updateAccountSelector() {
-	document.getElementById('popup_versionSelector').innerHTML = '<div class="accountItem" onclick="onAddAccountPressed()"><img src="./assets/plus.png" alt="Avatar" id="playerIcon" class="avatar"><h1>Add Account</h1></div>';
+	document.getElementById('popup_versionSelector').innerHTML = '<div class="accountItem" onclick="onAddAccountPressed()"><img src="./assets/plus.png" alt="Avatar" id="playerIcon" class="avatar"><h1>Add Account</h1></div><div class="accountItem" onclick="onRemoveAccountPressed()"><img src="./assets/delete.png" alt="Avatar" id="playerIcon" class="avatar"><h1>Log Out</h1></div>';
 
 	var newAccountData = {acs: [], selected: 0};
 
@@ -386,6 +392,12 @@ function updateAccountSelector() {
 	newAccountData.selected = newAccountData.acs.length - 1;
 	accountData = newAccountData;
 
+	if(this.accountData.acs[this.accountData.selected] == undefined) {
+		document.getElementById('btn_account_div').innerHTML = '<img src="./assets/no_ac.png" alt="Avatar" id="playerIcon" class="avatar"><div id="btn_account" class="accountButton">Accounts</div>'
+	} else {
+		document.getElementById('btn_account_div').innerHTML = `<img src="https://mc-heads.net/avatar/${this.accountData.acs[this.accountData.selected].username.toLowerCase()}/" alt="Avatar" id="playerIcon" class="avatar"><div id="btn_account" class="accountButton">${this.accountData.acs[this.accountData.selected].username}</div>`;	
+	}
+
 	auth.saveAcData(newAccountData, accountData.selected);
 }
 
@@ -397,4 +409,21 @@ function loadVersions() {
 			document.getElementById('div_versions').innerHTML += (`<div><h1>${key}</h1><img onclick="onButtonVersionPress('${key}', this)" src="assets/versions/${key}.png"alt="background" class="versionsImage" id="vImg_${key}"></div>`);
 		}
 	});
+}
+
+function onRemoveAccountPressed() {
+	const acs = [];
+	accountData.acs.forEach((key, index, array) => {
+		if(index != accountData.selected) {
+			console.log(`Adding ${JSON.stringify(key, 4, 4)}...`);
+			acs.push(key);
+		}
+	});
+	accountData.acs = acs;
+
+	accountData.selected = 0;
+
+	console.log(`New Data: ${JSON.stringify(accountData, 4, 4)}`);
+	auth.saveAcData(accountData, accountData.selected);
+	updateAccountSelector();
 }

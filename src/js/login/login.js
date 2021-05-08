@@ -1,4 +1,3 @@
-const fs = require('fs');
 const auth = require('./js/auth.js');
 const settings = require('./js/settings.js');
 
